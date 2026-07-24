@@ -5,27 +5,33 @@ import { db } from "@/configs/db";
 import { usersTable } from "@/configs/schema";
 
 export async function POST(req: NextRequest) {
+  try {
     const { userEmail, userName } = await req.json();
 
-    // try {
-    const result = await db.select().from(usersTable)
-        .where(eq(usersTable.email, userEmail));
+    const result = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.email, userEmail));
 
-    if (result?.length == 0) {
+    if (result.length === 0) {
+      const inserted = await db
+        .insert(usersTable)
+        .values({
+          name: userName,
+          email: userEmail,
+          credits: 0,
+        })
+        .returning();
 
-        const result: any = await db.insert(usersTable).values({
-            name: userName,
-            email: userEmail,
-            credits: 0,
-            // @ts-ignore
-        }).returning(usersTable);
-
-        return NextResponse.json(result[0]);
+      return NextResponse.json(inserted[0]);
     }
+
     return NextResponse.json(result[0]);
-
-
-    // } catch (e) {
-    //     return NextResponse.json(e)
-    // }
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: String(error) },
+      { status: 500 }
+    );
+  }
 }

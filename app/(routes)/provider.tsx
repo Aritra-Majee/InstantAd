@@ -7,6 +7,7 @@ import axios from "axios";
 import AppHeader from '../_components/AppHeader';
 import { AppSidebar } from '../_components/AppSidebar';
 
+
 function DashboardProvider({
     children,
 }: Readonly<{
@@ -20,7 +21,7 @@ function DashboardProvider({
         if (!user?.user && user.user) return router.replace('/')
 
 
-        user?.user && checkUser()
+        //user?.user && checkUser()
 
     }, [user])
 

@@ -1,40 +1,37 @@
-"use client"
-import { auth } from '@/configs/firebaseConfig';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import React from 'react'
+"use client";
+import { auth } from "@/configs/firebaseConfig";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import React from "react";
 
 function Authentication({ children }: any) {
-    const provider = new GoogleAuthProvider();
+  const provider = new GoogleAuthProvider();
+  const router = useRouter();
 
-    const onButtonPress = () => {
-        signInWithPopup(auth, provider)
-            .then((result) => {
-                // This gives you a Google Access Token. You can use it to access the Google API.
-                const credential: any = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
-                // The signed-in user info.
-                const user = result.user;
-                console.log(user);
-                // IdP data available using getAdditionalUserInfo(result)
-                // ...
-            }).catch((error) => {
-                // Handle Errors here.
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                // The email of the user's account used.
-                const email = error.customData.email;
-                // The AuthCredential type that was used.
-                const credential = GoogleAuthProvider.credentialFromError(error);
-                // ...
-            });
+  const onButtonPress = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+
+      const user = result.user;
+      const idToken = await user.getIdToken();
+
+      document.cookie = `firebase_token=${idToken}; path=/`;
+
+      toast.success(`Welcome back, ${user.displayName}! 👋`);
+
+      router.replace("/app");
+    } catch (error: any) {
+      console.error(error);
+
+      toast.error(error?.message || "Failed to sign in. Please try again.");
     }
-    return (
-        <div>
-            <div onClick={onButtonPress}>
-                {children}
-            </div>
-        </div>
-    )
+  };
+  return (
+    <div>
+      <div onClick={onButtonPress}>{children}</div>
+    </div>
+  );
 }
 
-export default Authentication
+export default Authentication;
