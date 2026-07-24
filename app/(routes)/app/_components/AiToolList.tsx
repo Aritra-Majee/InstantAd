@@ -24,7 +24,7 @@ function AiToolList() {
       <h2 className="font-bold text-2xl mb-2">Creative AI Tools</h2>
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 max-w-6xl">
         {AiTools.map((tool, index) => (
-          <div className="flex items-stretch justify-between p-8 bg-zinc-800 rounded-3xl min-h-[340px]">
+          <div key={tool.path} className="flex items-stretch justify-between p-8 bg-zinc-800 rounded-3xl min-h-[340px]">
             <div className="flex flex-col justify-between flex-1 pr-6">
               <div>
                 <h2 className="font-bold text-3xl leading-tight">
