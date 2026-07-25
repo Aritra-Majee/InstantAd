@@ -148,7 +148,7 @@ export async function POST(req: NextRequest) {
     const cloudflareForm = new FormData();
 
     cloudflareForm.append(
-      "input_image_1",
+      "input_image_0",
       new Blob([new Uint8Array(imageBuffer)], {
         type: "image/png",
       }),
@@ -163,7 +163,7 @@ export async function POST(req: NextRequest) {
       avatarBuffer = Buffer.from(arrayBuffer.data);
 
       cloudflareForm.append(
-        "input_image_0",
+        "input_image_1",
         new Blob([new Uint8Array(avatarBuffer)], {
           type: "image/png",
         }),
@@ -181,10 +181,10 @@ export async function POST(req: NextRequest) {
     cloudflareForm.append("width", width);
     cloudflareForm.append("height", height);
 
-    console.log("Prompt:", cloudflareForm.get("prompt"));
     console.log("Width:", cloudflareForm.get("width"));
     console.log("Height:", cloudflareForm.get("height"));
     console.log(cloudflare.defaults.baseURL);
+
     console.log("Calling Cloudflare...");
 
     const aiResponse = await cloudflare.post(
