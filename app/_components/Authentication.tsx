@@ -18,7 +18,7 @@ function Authentication({ children }: any) {
 
       document.cookie = `firebase_token=${idToken}; path=/`;
 
-      toast.success(`Welcome back, ${user.displayName}! 👋`);
+      toast.success(`Welcome, ${user.displayName}! 👋`);
 
       router.replace("/app");
     } catch (error: any) {
